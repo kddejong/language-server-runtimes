@@ -24,6 +24,9 @@ import {
     DeleteFilesParams,
     RenameFilesParams,
     DidSaveTextDocumentParams,
+    DidOpenTextDocumentParams,
+    DidCloseTextDocumentParams,
+    DidChangeTextDocumentParams,
 } from '../../../protocol'
 import { InitializeParams, PartialInitializeResult } from '../../../server-interface/lsp'
 import { CredentialsType, Logging, Notification } from '../../../server-interface'
@@ -52,6 +55,9 @@ export class LspServer {
     private didCreateFilesHandler?: NotificationHandler<CreateFilesParams>
     private didDeleteFilesHandler?: NotificationHandler<DeleteFilesParams>
     private didRenameFilesHandler?: NotificationHandler<RenameFilesParams>
+    private didOpenTextDocumentHandler?: NotificationHandler<DidOpenTextDocumentParams>
+    private didCloseTextDocumentHandler?: NotificationHandler<DidCloseTextDocumentParams>
+    private didChangeTextDocumentHandler?: NotificationHandler<DidChangeTextDocumentParams>
     private didSaveTextDocumentHandler?: NotificationHandler<DidSaveTextDocumentParams>
 
     constructor(
@@ -127,6 +133,18 @@ export class LspServer {
 
     public setDidRenameFilesHandler = (handler: NotificationHandler<RenameFilesParams>): void => {
         this.didRenameFilesHandler = handler
+    }
+
+    public setDidOpenTextDocumentHandler = (handler: NotificationHandler<DidOpenTextDocumentParams>): void => {
+        this.didOpenTextDocumentHandler = handler
+    }
+
+    public setDidCloseTextDocumentHandler = (handler: NotificationHandler<DidCloseTextDocumentParams>): void => {
+        this.didCloseTextDocumentHandler = handler
+    }
+
+    public setDidChangeTextDocumentHandler = (handler: NotificationHandler<DidChangeTextDocumentParams>): void => {
+        this.didChangeTextDocumentHandler = handler
     }
 
     public setDidSaveTextDocumentHandler = (handler: NotificationHandler<DidSaveTextDocumentParams>): void => {
@@ -214,6 +232,18 @@ export class LspServer {
 
     public sendDidRenameFilesNotification = (params: RenameFilesParams): void => {
         this.didRenameFilesHandler?.(params)
+    }
+
+    public sendDidOpenTextDocumentNotification = (params: DidOpenTextDocumentParams): void => {
+        this.didOpenTextDocumentHandler?.(params)
+    }
+
+    public sendDidCloseTextDocumentNotification = (params: DidCloseTextDocumentParams): void => {
+        this.didCloseTextDocumentHandler?.(params)
+    }
+
+    public sendDidChangeTextDocumentNotification = (params: DidChangeTextDocumentParams): void => {
+        this.didChangeTextDocumentHandler?.(params)
     }
 
     public sendDidSaveTextDocumentNotification = (params: DidSaveTextDocumentParams): void => {
